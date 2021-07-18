@@ -1,68 +1,22 @@
-import react,{Component} from "react";
-import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
-
+import React from 'react';
+import Layout from './components/Layout/Layout';
 import Home from './pages/Home';
-import Chat from './pages/Chat';
-import Signup from './pages/Signup';
-import Login from './pages/Login';
-import { auth } from './services/firebase';
+import './App.css';
+import {Route, Switch} from 'react-router-dom';
+import SignIn from './containers/SignIn/SignIn';
+import SignUp from './containers/SignUp/SignUp';
 
-function PublicRoute({component: Component, authenticated, ...rest}){
-  return <Route>
-    {...rest}
-    render= {(props => authenticated === false? <Component {...props}/> : <Redirect to='/chat'/>)}
-  </Route>
-}
 
-function PrivateRoute({ component: Component, authenticated, ...rest }) {
+const App = () => {
   return (
-    <Route
-      {...rest}
-      render={(props) => authenticated === true
-        ? <Component {...props} />
-        : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />}
-    />
+    <Layout>
+      <Switch>
+        <Route path="/" exact component={Home}/>
+        <Route path="/signin" component={SignIn} />
+        <Route path="/signup" component={SignUp}/>
+      </Switch>
+    </Layout>
   )
 }
 
-
-
- class App extends Component {
-
-  state = {
-    loading: false,
-    authenticated : false
-  }
-
-  componentDidMount(){
-    auth().onAuthStateChanged((user)=>{
-      if(user){
-        this.setState({
-          loading:false,
-          authenticated: true
-        })
-      }else{
-        this.setState({
-          loading:false,
-          authenticated:false
-        })
-      }
-    })
-  }
-
-   render(){
-    return this.state.loading === true? <h2>Loading...</h2>:(
-      <Router>
-        <Switch>
-          <Route exact path='/' component={Home}></Route>
-          <PrivateRoute path='/chat' authenticated={this.state.authenticated} component={Chat}></PrivateRoute>
-          <PublicRoute path='/signup' authenticated={this.state.authenticated} component={Signup}></PublicRoute>
-          <PublicRoute path='/login' authenticated={this.state.authenticated} component={Login}></PublicRoute>
-        </Switch>
-      </Router>
-    )
-   }
-
-}
-
-export default App;
+export default App
