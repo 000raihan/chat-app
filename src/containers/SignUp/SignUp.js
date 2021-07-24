@@ -1,17 +1,34 @@
 import React, { useState } from "react";
 import Card from "../../components/Ui/Card/Card";
 import "./style.css";
+import { useDispatch } from "react-redux";
+import * as actions from '../../store/actions/index';
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+
+  const registerUser = (e) => {
+    e.preventDefault();
+
+    const userData = {
+      firstName,
+      lastName,
+      email,
+      password,
+    };
+
+    dispatch(actions.signUp(userData));
+
+  };
 
   return (
     <div className="registerContainer">
       <Card>
-        <form>
+        <form onSubmit={(e)=>registerUser(e)}>
           <input
             name="firstName"
             type="text"

@@ -1,10 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import firebase from 'firebase';
-import { BrowserRouter } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import firebase from "firebase";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./store/store";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -14,18 +16,22 @@ const firebaseConfig = {
   storageBucket: "chat-app-3bbc0.appspot.com",
   messagingSenderId: "888511608973",
   appId: "1:888511608973:web:dacb2272cddeb1d6824ac4",
-  measurementId: "G-6NFYML9LYD"
+  measurementId: "G-6NFYML9LYD",
 };
 
 firebase.initializeApp(firebaseConfig);
 
+window.store = store;
+
 ReactDOM.render(
-  <BrowserRouter>
-    <React.StrictMode>
-    <App />
-  </React.StrictMode>
-  </BrowserRouter>,
-  document.getElementById('root')
+  <Provider store={store}>
+    <BrowserRouter>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </BrowserRouter>
+  </Provider>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
